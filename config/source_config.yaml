@@ -1,0 +1,80 @@
+---
+# Data Source Configuration
+
+sources:
+  - name: twitter
+    type: api
+    enabled: true
+    config:
+      consumer_key: YOUR_CONSUMER_KEY
+      consumer_secret: YOUR_CONSUMER_SECRET
+      access_token: YOUR_ACCESS_TOKEN
+      access_token_secret: YOUR_ACCESS_TOKEN_SECRET
+      keywords: 
+        - "AI"
+        - "machine learning"
+        - "data science"
+      languages: 
+        - "en"
+      max_tweets: 1000
+      interval: 3600  
+
+  - name: customer_reviews
+    type: csv
+    enabled: true
+    config:
+      file_path: "/data/customer_reviews.csv"
+      encoding: "utf-8"
+      delimiter: ","
+      columns:
+        - "review_id"
+        - "product_id"
+        - "review_text"
+        - "rating"
+        - "timestamp"
+      batch_size: 5000
+
+  - name: news_articles
+    type: rss
+    enabled: true
+    config:
+      urls: 
+        - "http://rss.cnn.com/rss/edition_technology.rss"
+        - "https://feeds.feedburner.com/TechCrunch/"
+      update_interval: 1800  
+      max_articles: 100
+
+  # - name: reddit
+  #   type: api
+  #   enabled: false  
+  #   config:
+  #     client_id: YOUR_REDDIT_CLIENT_ID
+  #     client_secret: YOUR_REDDIT_CLIENT_SECRET
+  #     user_agent: "SentimentAnalysisBot/1.0"
+  #     subreddits: 
+  #       - "technology"
+  #       - "datascience"
+  #       - "MachineLearning"
+  #     sort: "hot"
+  #     limit: 500
+  #     time_filter: "day"
+
+global_config:
+  max_retries: 3
+  retry_delay: 60  # seconds
+  timeout: 30  # seconds
+  proxy:
+    enabled: false
+    http: "http://proxy..com:8080"
+    https: "https://proxy.example.com:8080"
+
+data_storage:
+  raw_data_path: "/data/raw/"
+  processed_data_path: "/data/processed/"
+  file_format: "parquet"
+
+data_validation:
+  perform_validation: true
+  min_length: 10  
+  max_length: 5000 
+  remove_duplicates: true

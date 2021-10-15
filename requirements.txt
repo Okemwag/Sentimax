@@ -1,0 +1,8 @@
+tweepy
+selenium
+pandas
+numpy
+python-dotenv
+beautifulsoup4
+sqlalchemy
+facebook-scraper

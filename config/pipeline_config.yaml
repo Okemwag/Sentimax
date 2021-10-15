@@ -1,0 +1,109 @@
+---
+# Pipeline Configuration
+
+# Data Sources
+data_sources:
+  - name: twitter
+    type: api
+    config:
+      consumer_key: YOUR_CONSUMER_KEY
+      consumer_secret: YOUR_CONSUMER_SECRET
+      access_token: YOUR_ACCESS_TOKEN
+      access_token_secret: YOUR_ACCESS_TOKEN_SECRET
+      keywords: ["product", "brand", "service"]
+      languages: ["en"]
+  - name: customer_reviews
+    type: csv
+    config:
+      file_path: "/data/customer_reviews.csv"
+      encoding: "utf-8"
+      delimiter: ","
+  - name: news_articles
+    type: rss
+    config:
+      urls: 
+        - "http://rss.cnn.com/rss/edition.rss"
+        - "http://feeds.bbci.co.uk/news/rss.xml"
+
+# Kafka Configuration
+kafka:
+  bootstrap_servers:
+    - "localhost:9092"
+  topics:
+    - name: raw_data
+      partitions: 3
+      replication_factor: 1
+    - name: processed_data
+      partitions: 3
+      replication_factor: 1
+
+# Spark Configuration
+spark:
+  master: "local[*]"
+  app_name: "Sentiment Analysis Pipeline"
+  executor_memory: "4g"
+  driver_memory: "2g"
+
+# Preprocessing Configuration
+preprocessing:
+  steps:
+    - lowercase
+    - remove_punctuation
+    - remove_stopwords
+    - lemmatize
+  language: "english"
+
+# Sentiment Analysis Configuration
+sentiment_analysis:
+  model: "vader"  
+  custom_model_path: "/models/custom_sentiment_model.pkl"
+  batch_size: 1000
+
+# Elasticsearch Configuration
+elasticsearch:
+  hosts: 
+    - "http://localhost:9200"
+  index_name: "sentiment_analysis"
+  document_type: "sentiment"
+  bulk_size: 500
+
+# Airflow Configuration
+airflow:
+  dag_id: "sentiment_analysis_pipeline"
+  schedule_interval: "0 * * * *"  # Run every hour
+  catchup: False
+  max_active_runs: 1
+
+# Logging Configuration
+logging:
+  level: INFO
+  file: "/logs/pipeline.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Monitoring Configuration
+monitoring:
+  enable_prometheus: True
+  prometheus_port: 8000
+  enable_grafana: True
+  grafana_port: 3000
+
+# Error Handling
+error_handling:
+  max_retries: 3
+  retry_delay: 300  # seconds
+
+# Performance Tuning
+performance:
+  enable_caching: True
+  cache_size: "1g"
+  parallelize_ingestion: True
+  num_partitions: 5
+
+# Output Configuration
+output:
+  save_raw_data: True
+  raw_data_path: "/data/raw"
+  save_processed_data: True
+  processed_data_path: "/data/processed"
+  save_results: True
+  results_path: "/data/results"
