@@ -15,7 +15,6 @@ This project implements a scalable data pipeline for sentiment analysis on large
 
 ## Architecture
 
-[Include a simple architecture diagram here]
 
 The project consists of the following components:
 
